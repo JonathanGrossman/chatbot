@@ -1,9 +1,8 @@
 """
 This is the template server side for ChatBot
 """
-from bottle import route, run, template, static_file, request
+from bottle import request, route, run, static_file, template
 import json
-
 
 @route('/', method='GET')
 def index():
