@@ -85,6 +85,11 @@ def check_ends_with(user_input):
 def additional_processing(message):
     if "where" in message:
         return "where"
+    if message.lower().startswith("robber's language"):
+        array = message.split()
+        new = array[2:]
+        joined = " ".join(new)
+        return translate_to_robbers(joined)
     else:
         counter = 0
         for item in message:
@@ -93,6 +98,16 @@ def additional_processing(message):
             return check_vowel(message)
         else:
             return f"Your message is {counter} characters."
+
+
+def translate_to_robbers(message):
+    response = ""
+    for l in message:
+        if l in ["a", "e", "i", "o", "u", " "]:
+            response += l
+        else:
+            response += f"{l}o{l}"
+    return response
 
 
 def check_vowel(message):
