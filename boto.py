@@ -24,14 +24,12 @@ def check_type(message):
 def return_max(numbers):
     first = int(numbers[0])
     second = int(numbers[1])
-    print(first)
-    print(second)
     if first > second:
-        return second
-    elif second > first:
-        return second
+        return f"{first} is greater than {second}."
+    elif first < second:
+        return f"{second} is greater than {first}."
     else:
-        return first
+        return f"{first} is equal to {second}"
 
 
 def check_starts_with(current_response):
