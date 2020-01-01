@@ -6,7 +6,7 @@ def check_for_cursing(message):
     curse_words = ["fuck", "shit", "bitch", "dick", "slut", "whore", "ass", "asshole"]
     for item in curse_words:
         if item in message:
-            return "Please, no cursing. Try again. This time, keep is classy."
+            return "Please, no cursing. Try again. This time, keep it classy."
         else:
             return check_type(message)
 
@@ -48,8 +48,8 @@ def return_max_of_three(numbers):
         return "You entered the same number three times!"
 
 
-def check_starts_with(current_response):
-    words_array = current_response.split()
+def check_starts_with(message):
+    words_array = message.split()
     first_word = words_array[0].lower()
     if first_word == "hello " or first_word == "hello" or first_word == "hello," \
             or first_word == "hello!" or first_word == "hello." or first_word == "hello?":
@@ -68,17 +68,29 @@ def check_starts_with(current_response):
 
 
 def check_ends_with(user_input):
+    additional_response = additional_processing(user_input)
     if user_input.endswith("?"):
-        response = "Great question."
+        response = "Great question. " + additional_response
         return response
     elif user_input.endswith("!"):
-        response = "I'm excited too."
+        response = "I'm excited too. " + additional_response
         return response
     elif user_input.endswith("."):
-        response = "OK. Let me respond."
+        response = "OK. Let me respond. " + additional_response
         return response
     else:
-        return ""
+        return additional_response
+
+
+def additional_processing(message):
+    if "where" in message:
+        return "where"
+    else:
+        counter = 0
+        for item in message:
+            counter += 1
+        return f"Your message is {counter} characters."
+
 
 
 @route('/', method='GET')
