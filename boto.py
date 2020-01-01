@@ -2,13 +2,23 @@ from bottle import request, route, run, static_file, template
 import json
 
 
-def check_starts_with(user_input):
-    if user_input.startswith("Hello"):
+def check_starts_with(words_array):
+    first_word = words_array[0].lower()
+    if first_word == "hello " or first_word == "hello" or first_word == "hello," \
+            or first_word == "hello!" or first_word == "hello." or first_word == "hello?":
         return "Hello. "
-    elif user_input.startswith("Hey"):
+    if first_word == "hi " or first_word == "hi" or first_word == "hi," \
+            or first_word == "hi!" or first_word == "hi." or first_word == "hi?":
+        return "Hi to you. "
+    elif first_word.startswith("shalom"):
+        return "Shalom alechem. "
+    elif first_word.startswith("hola"):
+        return "Hola. Hablo un poquito espanol. "
+    elif first_word == "hey ":
         return "Hey is for horses. "
     else:
         return ""
+
 
 def check_ends_with(user_input):
     if user_input.endswith("?"):
@@ -24,6 +34,13 @@ def check_ends_with(user_input):
         return ""
 
 
+def check_for_cursing(array):
+    curse_words = ["fuck", "shit", "bitch", "dick", "slut", "whore", "ass", "asshole"]
+    array = [x.lower() for x in array]
+    curse_check = any(item in curse_words for item in array)
+    return curse_check
+
+
 @route('/', method='GET')
 def index():
     return template("chatbot.html")
@@ -32,7 +49,11 @@ def index():
 @route("/chat", method='POST')
 def chat():
     user_message = request.POST.get('msg')
-    boto_response = check_starts_with(user_message) + check_ends_with(user_message)
+    array_user_message = user_message.split()
+    if check_for_cursing(array_user_message):
+        boto_response = "Please, no cursing. Try again. This time, keep is classy."
+    else:
+        boto_response = check_starts_with(array_user_message) + check_ends_with(user_message)
     return json.dumps({"animation": "inlove", "msg": boto_response})
 
 
