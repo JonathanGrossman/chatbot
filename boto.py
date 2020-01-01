@@ -2,7 +2,40 @@ from bottle import request, route, run, static_file, template
 import json
 
 
-def check_starts_with(words_array):
+def check_for_cursing(message):
+    curse_words = ["fuck", "shit", "bitch", "dick", "slut", "whore", "ass", "asshole"]
+    for item in curse_words:
+        if item in message:
+            return "Please, no cursing. Try again. This time, keep is classy."
+        else:
+            return check_type(message)
+
+
+def check_type(message):
+    type_check = message.split(", ")
+    if type_check[0].isdigit() and type_check[1].isdigit():
+        return return_max(type_check)
+    else:
+        check_start = check_starts_with(message)
+        check_end = check_ends_with(message)
+        return check_start + check_end
+
+
+def return_max(numbers):
+    first = int(numbers[0])
+    second = int(numbers[1])
+    print(first)
+    print(second)
+    if first > second:
+        return second
+    elif second > first:
+        return second
+    else:
+        return first
+
+
+def check_starts_with(current_response):
+    words_array = current_response.split()
     first_word = words_array[0].lower()
     if first_word == "hello " or first_word == "hello" or first_word == "hello," \
             or first_word == "hello!" or first_word == "hello." or first_word == "hello?":
@@ -34,14 +67,6 @@ def check_ends_with(user_input):
         return ""
 
 
-def check_for_cursing(array):
-    curse_words = ["fuck", "shit", "bitch", "dick", "slut", "whore", "ass", "asshole"]
-    # array = [x.lower() for x in array]
-    for item in curse_words:
-        if item in array:
-            return True
-
-
 @route('/', method='GET')
 def index():
     return template("chatbot.html")
@@ -50,11 +75,7 @@ def index():
 @route("/chat", method='POST')
 def chat():
     user_message = request.POST.get('msg')
-    array_user_message = user_message.split()
-    if check_for_cursing(user_message):
-        boto_response = "Please, no cursing. Try again. This time, keep is classy."
-    else:
-        boto_response = check_starts_with(array_user_message) + check_ends_with(user_message)
+    boto_response = check_for_cursing(user_message)
     return json.dumps({"animation": "inlove", "msg": boto_response})
 
 
