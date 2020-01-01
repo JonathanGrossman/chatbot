@@ -1,5 +1,6 @@
 from bottle import request, route, run, static_file, template
 import json
+import random
 
 
 def check_for_cursing(message):
@@ -152,6 +153,13 @@ def check_vowel(message):
         return f"{message} is not a vowel."
 
 
+def select_animation():
+    images_array = ["afraid", "bored", "confused", "crying", "dancing", "dog", "excited", "giggling", "heartbroke",
+                    "inlove", "laughing", "money", "no", "ok", "takeoff", "waiting"]
+    i = random.randint(0, len(images_array) - 1)
+    return images_array[i]
+
+
 @route('/', method='GET')
 def index():
     return template("chatbot.html")
@@ -160,8 +168,9 @@ def index():
 @route("/chat", method='POST')
 def chat():
     user_message = request.POST.get('msg')
+    animation = select_animation()
     boto_response = check_for_cursing(user_message)
-    return json.dumps({"animation": "inlove", "msg": boto_response})
+    return json.dumps({"animation": animation, "msg": boto_response})
 
 
 @route("/test", method='POST')
