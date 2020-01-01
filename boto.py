@@ -89,9 +89,19 @@ def additional_processing(message):
         counter = 0
         for item in message:
             counter += 1
-        return f"Your message is {counter} characters."
+        if counter == 1:
+            return check_vowel(message)
+        else:
+            return f"Your message is {counter} characters."
 
 
+def check_vowel(message):
+    if message.lower() in ["a", "e", "i", "o", "u"]:
+        return f"{message} is a vowel."
+    elif message.lower() == "y":
+        return f"Sometimes {message} is a vowel."
+    else:
+        return f"{message} is not a vowel."
 
 @route('/', method='GET')
 def index():
