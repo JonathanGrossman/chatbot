@@ -83,13 +83,19 @@ def check_ends_with(user_input):
 
 
 def additional_processing(message):
-    if "where" in message:
+    array = message.split()
+    new = array[1:]
+    joined = " ".join(new)
+    if message.lower().startswith("where"):
         return "where"
-    if message.lower().startswith("robber's language"):
-        array = message.split()
+    elif message.lower().startswith("robber's language"):
         new = array[2:]
         joined = " ".join(new)
         return translate_to_robbers(joined)
+    elif message.lower().startswith("reverse"):
+        return reverse_message(joined)
+    elif message.lower().startswith("palindrome"):
+        return palindrome(joined)
     else:
         counter = 0
         for item in message:
@@ -101,12 +107,39 @@ def additional_processing(message):
 
 
 def translate_to_robbers(message):
-    response = ""
-    for l in message:
-        if l in ["a", "e", "i", "o", "u", " "]:
-            response += l
+    translated = ""
+    if message == "":
+        return "You forgot to enter what you wanted me to translate."
+    else:
+        for l in message:
+            if l in ["a", "e", "i", "o", "u", " "]:
+                translated += l
+            else:
+                translated += f"{l}o{l}"
+        return translated
+
+
+def reverse_message(message):
+    if message == "":
+        return "You forgot to enter what you wanted me to reverse."
+    else:
+        reversed_message = ""
+        for l in message:
+            reversed_message = l + reversed_message
+        return reversed_message
+
+
+def palindrome(message):
+    if message == "":
+        response = "You forgot to enter what you wanted me to check."
+    else:
+        backwards = ""
+        for l in message:
+            backwards = l + backwards
+        if message == backwards:
+            response = f"Yes, {message} is a palindrome!"
         else:
-            response += f"{l}o{l}"
+            response = f"No, {message} is NOT a palindrome."
     return response
 
 
@@ -117,6 +150,7 @@ def check_vowel(message):
         return f"Sometimes {message} is a vowel."
     else:
         return f"{message} is not a vowel."
+
 
 @route('/', method='GET')
 def index():
