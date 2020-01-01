@@ -13,23 +13,39 @@ def check_for_cursing(message):
 
 def check_type(message):
     type_check = message.split(", ")
-    if type_check[0].isdigit() and type_check[1].isdigit():
-        return return_max(type_check)
+    if type_check[0].isdigit() and type_check[1].isdigit() and len(type_check) == 2:
+        return return_max_of_two(type_check)
+    if type_check[0].isdigit() and type_check[1].isdigit() and type_check[2].isdigit() and len(type_check) == 3:
+        return return_max_of_three(type_check)
     else:
         check_start = check_starts_with(message)
         check_end = check_ends_with(message)
         return check_start + check_end
 
 
-def return_max(numbers):
+def return_max_of_two(numbers):
     first = int(numbers[0])
     second = int(numbers[1])
     if first > second:
         return f"{first} is greater than {second}."
-    elif first < second:
+    elif second > first:
         return f"{second} is greater than {first}."
     else:
-        return f"{first} is equal to {second}"
+        return "You entered the same number twice!"
+
+
+def return_max_of_three(numbers):
+    first = int(numbers[0])
+    second = int(numbers[1])
+    third = int(numbers[2])
+    if first > second and first > third:
+        return f"{first} is greater than {second} and {third}."
+    elif second > first and second > third:
+        return f"{second} is greater than {first} and {third}."
+    elif third > first and third > second:
+        return f"{third} is greater than {first} and {second}."
+    else:
+        return "You entered the same number three times!"
 
 
 def check_starts_with(current_response):
