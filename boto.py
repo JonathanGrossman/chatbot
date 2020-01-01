@@ -36,9 +36,10 @@ def check_ends_with(user_input):
 
 def check_for_cursing(array):
     curse_words = ["fuck", "shit", "bitch", "dick", "slut", "whore", "ass", "asshole"]
-    array = [x.lower() for x in array]
-    curse_check = any(item in curse_words for item in array)
-    return curse_check
+    # array = [x.lower() for x in array]
+    for item in curse_words:
+        if item in array:
+            return True
 
 
 @route('/', method='GET')
@@ -50,7 +51,7 @@ def index():
 def chat():
     user_message = request.POST.get('msg')
     array_user_message = user_message.split()
-    if check_for_cursing(array_user_message):
+    if check_for_cursing(user_message):
         boto_response = "Please, no cursing. Try again. This time, keep is classy."
     else:
         boto_response = check_starts_with(array_user_message) + check_ends_with(user_message)
