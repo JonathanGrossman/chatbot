@@ -5,10 +5,9 @@ def check_for_cursing(message):
     curse_words = ["fuck", "shit", "bitch", "dick", "slut", "whore", "ass", "asshole"]
     for item in curse_words:
         if item in message:
-            return "Please, no cursing. Try again. This time, keep it classy. Type boto for more information."
+            return "Please, no cursing. Try again. This time, keep it classy. Type 'boto info' for more information."
         else:
             return check_type(message)
-            # return check_type(message) + " Type 'boto' for more information."
 
 
 def check_type(message):
@@ -68,7 +67,11 @@ def additional_processing(message):
         return check_for_reverse(message)
     if check_for_palindrome(message) is not None:
         return check_for_palindrome(message)
-    return counter_number_characters(message)
+    array = message.split()
+    if len(array) == 1:
+        return counter_number_characters(message)
+    else:
+        return "Hmm. I don't understand. Have you tried searching Google or talking to your parents?"
 
 
 def counter_number_characters(message):
@@ -78,8 +81,8 @@ def counter_number_characters(message):
     if counter == 1:
         return check_vowel(message)
     else:
-        return f"I love your name! I'm a robot, so I'm great with names. Yours is {message}. As a side note, " \
-               f" your name is {counter} letters. Are you from Kansas City, Chicago, New York, or Tel Aviv? If so, " \
+        return f"I love your name! I'm a robot, so I'm great with names. Yours is {message}."
+               f" Your name is {counter} letters. Are you from Kansas City, Chicago, New York, or Tel Aviv? If so, " \
                f"type the city's name. Otherwise, type, 'nope'."
 
 
@@ -92,7 +95,8 @@ def check_for_location(message):
 
 def respond_location(city):
     next_prompt = "Let's see if we have anything in common. Type the names of the following foods that you like. " \
-                     "Peanut butter, chocolate, and sweet potato. If you like none, type 'none'?"
+                     "Peanut butter, chocolate, and sweet potato. Separate them with commas and a space. " \
+                     "If you like none, type 'none'?"
     if city == "tel aviv":
         return "Really?! Great city. " + next_prompt
     elif city == "kansas city":
@@ -122,9 +126,9 @@ def respond_food(message):
                 foods_in_common.append(item)
     string = ", ".join(foods_in_common)
     if string == "":
-        return "Shoot. I guess we don't have that in common. Type 'boto' to learn what I can do."
+        return "Shoot. I guess we don't have that in common. Type 'boto info' to learn what I can do."
     else:
-        return f"Alright! I also like {string}. Type 'boto' to learn more about what I can do."
+        return f"Alright! I also like {string}. Type 'boto info' to learn more about what I can do."
 
 
 def return_max_of_two(numbers):
@@ -223,8 +227,42 @@ def check_vowel(message):
         return f"{message} is not a vowel."
 
 
-def select_animation():
+def select_animation(message):
     images_array = ["afraid", "bored", "confused", "crying", "dancing", "dog", "excited", "giggling", "heartbroke",
                     "inlove", "laughing", "money", "no", "ok", "takeoff", "waiting"]
-    i = random.randint(0, len(images_array) - 1)
-    return images_array[i]
+    if message.lower().find("peanut butter") != -1:
+        chosen_animation = "inlove"
+    elif message.lower().find("chocolate") != -1:
+        chosen_animation = "takeoff"
+    elif message.lower().find("sweet potato") != -1:
+        chosen_animation = "money"
+    elif message.lower().find("kansas city") != -1:
+        chosen_animation = "excited"
+    elif message.lower().find("tel aviv") != -1:
+        chosen_animation = "dancing"
+    elif message.lower().find("chicago") != -1:
+        chosen_animation = "heartbroke"
+    elif message.lower().find("new york") != -1:
+        chosen_animation = "giggling"
+    elif message.lower().find("robber's language") != -1:
+        chosen_animation = "waiting"
+    elif message.lower().find("reverse") != -1:
+        chosen_animation = "no"
+    elif message.lower().find("palindrome") != -1:
+        chosen_animation = "ok"
+    elif message.lower().find("hello") != -1:
+        chosen_animation = "dog"
+    elif message.find("?") != -1:
+        chosen_animation = "confused"
+    elif message.find("!") != -1:
+        chosen_animation = "crying"
+    elif message.find(".") != -1:
+        chosen_animation = "laughing"
+    elif message.find("nope") != -1:
+        chosen_animation = "bored"
+    elif message.find("none") != -1:
+        chosen_animation = "afraid"
+    else:
+        i = random.randint(0, len(images_array) - 1)
+        chosen_animation = images_array[i]
+    return chosen_animation

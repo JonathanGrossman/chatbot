@@ -11,7 +11,7 @@ def index():
 @route("/chat", method='POST')
 def chat():
     user_message = request.POST.get('msg')
-    animation = select_animation()
+    animation = select_animation(user_message)
     boto_response = check_for_cursing(user_message)
     return json.dumps({"animation": animation, "msg": boto_response})
 
