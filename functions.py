@@ -1,4 +1,6 @@
 import random
+import requests, json
+import config
 
 
 def check_for_cursing(message):
@@ -67,6 +69,8 @@ def additional_processing(message):
         return check_for_reverse(message)
     if check_for_palindrome(message) is not None:
         return check_for_palindrome(message)
+    if check_weather(message) is not None:
+        return check_weather(message)
     array = message.split()
     if len(array) == 1:
         return counter_number_characters(message)
@@ -81,7 +85,7 @@ def counter_number_characters(message):
     if counter == 1:
         return check_vowel(message)
     else:
-        return f"I love your name! I'm a robot, so I'm great with names. Yours is {message}."
+        return f"I love your name! I'm a robot, so I'm great with names. Yours is {message}." \
                f" Your name is {counter} letters. Are you from Kansas City, Chicago, New York, or Tel Aviv? If so, " \
                f"type the city's name. Otherwise, type, 'nope'."
 
@@ -94,19 +98,19 @@ def check_for_location(message):
 
 
 def respond_location(city):
-    next_prompt = "Let's see if we have anything in common. Type the names of the following foods that you like. " \
+    next_prompt = " Let's see if we have anything in common. Type the names of the following foods that you like. " \
                      "Peanut butter, chocolate, and sweet potato. Separate them with commas and a space. " \
                      "If you like none, type 'none'?"
     if city == "tel aviv":
-        return "Really?! Great city. " + next_prompt
+        return "Really?! Great city. " + get_weather(city) + next_prompt
     elif city == "kansas city":
-        return "No way! I grew up there. " + next_prompt
+        return "No way! I grew up there. " + get_weather(city) + next_prompt
     elif city == "chicago":
-        return "The windy city. I lived there for a long time. " + next_prompt
+        return "The windy city. I lived there for a long time. " + get_weather(city) + next_prompt
     elif city == "new york":
-        return "There's no other place like NYC. " + next_prompt
+        return "There's no other place like NYC. " + get_weather(city) + next_prompt
     else:
-        return "Shoot. " + next_prompt
+        return "Shoot." + next_prompt
 
 
 def check_for_food(message):
@@ -196,7 +200,6 @@ def reverse_message(message):
 
 
 def check_for_palindrome(message):
-    print(message)
     array = message.split()
     new = array[1:]
     joined = " ".join(new)
@@ -225,6 +228,25 @@ def check_vowel(message):
         return f"Sometimes {message} is a vowel."
     else:
         return f"{message} is not a vowel."
+
+
+def check_weather(message):
+    if message.lower().startswith("weather:"):
+        return get_weather(message[9:])
+
+
+def get_weather(city):
+    api_key = config.api_key
+    base_url = "http://api.openweathermap.org/data/2.5/weather?"
+    complete_url = base_url + "appid=" + api_key + "&q=" + city
+    response = requests.get(complete_url)
+    x = response.json()
+    if x["cod"] != "404":
+        return f"The weather in {city}: {x['weather'][0]['main']}, {x['weather'][0]['description']}" \
+               f" with a temperature of {x['main']['temp']} K that feels like {x['main']['feels_like']} K and " \
+               f"humidity of {x['main']['humidity']}%."
+    else:
+        return "Having technical difficulties. Please try again later."
 
 
 def select_animation(message):
