@@ -71,6 +71,8 @@ def additional_processing(message):
         return check_for_palindrome(message)
     if check_weather(message) is not None:
         return check_weather(message)
+    if check_boto(message) is not None:
+        return check_boto(message)
     array = message.split()
     if len(array) == 1:
         return counter_number_characters(message)
@@ -231,7 +233,7 @@ def check_vowel(message):
 
 
 def check_weather(message):
-    if message.lower().startswith("weather:"):
+    if message.lower().startswith("weather"):
         return get_weather(message[9:])
 
 
@@ -247,6 +249,24 @@ def get_weather(city):
                f"humidity of {x['main']['humidity']}%."
     else:
         return "Having technical difficulties. Please try again later."
+
+
+def check_boto(message):
+    if message.lower().startswith("boto info"):
+        return get_boto_info(message)
+
+
+def get_boto_info(message):
+    return "I can do the following: " \
+           "(1) return the maximum of two or three numbers - enter the numbers seaprated by a comma and space " \
+           "(2) translate into robber's language - type 'robber's language' followed by what you want translated " \
+           "(3) reverse - type 'reverse' followed by what you want reversed " \
+           "(4) check for palindromes - type 'palindrome' followed by what you want checked " \
+           "(5) check whether a letter is a vowel - type one letter " \
+           "(6) get weather - type 'weather' and then the city " \
+           "(7) respond to a hello, hi, shalom, or hola " \
+           "(8) know whether someone asked a question or ended their input with an ! or a period " \
+           "(9) detect certain curse words "
 
 
 def select_animation(message):
