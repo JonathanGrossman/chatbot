@@ -258,7 +258,7 @@ def check_boto(message):
 
 def get_boto_info(message):
     return "I can do the following: " \
-           "(1) return the maximum of two or three numbers - enter the numbers seaprated by a comma and space " \
+           "(1) return the maximum of two or three numbers - enter the numbers separated by a comma and space " \
            "(2) translate into robber's language - type 'robber's language' followed by what you want translated " \
            "(3) reverse - type 'reverse' followed by what you want reversed " \
            "(4) check for palindromes - type 'palindrome' followed by what you want checked " \
